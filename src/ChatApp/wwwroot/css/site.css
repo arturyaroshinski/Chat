@@ -1,71 +1,101 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100wh;
 }
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+.nav {
+    background-color: #7952b3;
+    z-index: 100;
+    box-shadow: 0 1px 2px 0 #333;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.sidebar,
+.nav-link {
+    color: white;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.sidebar {
+    min-width: 100px;
+    background-color: #553584;
+    display: flex;
+    flex-direction: column;
+    z-index: 50;
+    box-shadow: 1px 0 2px #333;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.main {
+    flex-grow: 1;
+    display: flex;
 }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+.room-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 68px;
+    cursor: pointer;
+    margin: 0.75rem 1rem 0;
+    box-shadow: 0 1px 3px 1px #222;
+    background-color: #553584;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+.room-button > strong {
+    font-size: 36px;
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+.room-button:hover {
+    box-shadow: 0 2px 3px 1px #222;
 }
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+
+.chat {
+    flex-grow: 1;
+    background-color: #eee;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+}
+
+.chat-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1rem;
+    overflow: auto;
+}
+
+.chat-input {
+    background-color: #553584;
+    min-height: 70px;
+    z-index: 25;
+    box-shadow: 0 -1px 2px 0 #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.message {
+    display: flex;
+    flex-direction: row;
+}
+.message:first-child {
+    margin-top: auto;
+}
+
+.message > * {
+    padding: 0.2rem;
+}
+.message > header {
+    font-weight: bold;
+    min-width: 100px;
+    text-align: right;
+}
+.message > p {
+    flex-grow: 5;
+    margin: 0;
+}
+.message > footer {
+    min-width: 60px;
+    text-align: center;
 }
