@@ -1,4 +1,7 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿const CREATE_ROOM_BTN = $(".create-room-btn");
+const MODAL = $(".modal");
+const MODAL_CLOSE_BTN = $(".close");
 
-// Write your JavaScript code.
+// Event listeners
+CREATE_ROOM_BTN.on("click", () => MODAL.addClass("active"));
+MODAL_CLOSE_BTN.on("click", () => MODAL.removeClass("active"));
