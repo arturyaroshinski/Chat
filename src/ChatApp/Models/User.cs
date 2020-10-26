@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace Chat.Models
+namespace ChatApp.Models
 {
     public class User : IdentityUser
     {

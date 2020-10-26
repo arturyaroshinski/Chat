@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ChatApp.Database;
 using ChatApp.Models;
 
 namespace ChatApp.Controllers
@@ -12,15 +13,31 @@ namespace ChatApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ChatDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ChatDbContext dbContext)
         {
-            _logger = logger;
+            _dbContext = dbContext ?? throw new ArgumentNullException();
+            _logger = logger ?? throw new ArgumentNullException();
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateRoom(string name)
+        {
+            _dbContext.Chats.Add(new Chat
+            {
+                Name = name,
+                Type = ChatType.Public
+            });
+            // TODO: create repository for models
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

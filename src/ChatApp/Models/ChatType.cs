@@ -1,4 +1,4 @@
-namespace Chat.Models
+namespace ChatApp.Models
 {
     public enum ChatType
     {
