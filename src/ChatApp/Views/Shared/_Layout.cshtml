@@ -34,10 +34,23 @@
         <div class="chat">
             @RenderBody()
         </div>
+        <div class="modal active">
+            <form asp-controller="" asp-action="" class="modal-body">
+                <i class="fas fa-times close"></i>
+                <header>Create room</header>
+                <div class="">
+                    <input type="text" placeholder="Room name">
+                </div>
+                <footer>
+                    <button class="btn btn-success">Create</button>
+                </footer>
+            </form>
+        </div>
     </main>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://kit.fontawesome.com/e7ca90fa80.js" crossorigin="anonymous"></script>
     @RenderSection("Scripts", required: false)
 </body>
 

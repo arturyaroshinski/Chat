@@ -99,3 +99,54 @@
     min-width: 60px;
     text-align: center;
 }
+
+.modal {
+    display: none;
+    position: fixed;
+    min-height: 100vh;
+    min-width: 100vw;
+    z-index: 200;
+    background-color: rgba(0.2, 0.2, 0.2, 0.8);
+    top: 0;
+    left: 0;
+}
+
+.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-body {
+    position: relative;
+    flex: none;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    background-color: #553584;
+    padding: 1rem;
+}
+
+.modal-body > .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    margin-top: 0;
+}
+
+.modal-body > header {
+    color: #fff;
+    font-size: 24px;
+}
+
+.modal-body > * {
+    margin-top: 0.75rem;
+}
+
+.modal-body > div > input {
+    width: 100%;
+}
+
+.modal-body > footer {
+    text-align: center;
+}
