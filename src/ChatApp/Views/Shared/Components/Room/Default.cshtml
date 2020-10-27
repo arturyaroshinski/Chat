@@ -1,0 +1,9 @@
+﻿@model IEnumerable<Chat>
+
+<div class="sidebar">
+    @foreach (var chat in Model)
+    {
+        <div class="room-button">@chat.Name</div>
+    }
+    <div class="room-button create-room-btn"><strong>+</strong></div>
+</div>

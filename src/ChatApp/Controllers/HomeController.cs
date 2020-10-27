@@ -17,8 +17,8 @@ namespace ChatApp.Controllers
 
         public HomeController(ILogger<HomeController> logger, ChatDbContext dbContext)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException();
-            _logger = logger ?? throw new ArgumentNullException();
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public IActionResult Index()
