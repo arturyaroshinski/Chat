@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ChatApp.Database;
 using ChatApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatApp.Controllers
 {
@@ -24,6 +25,34 @@ namespace ChatApp.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Chat(int Id)
+        {
+            var chat = _dbContext.Chats
+                .Include(x => x.Messages)
+                .FirstOrDefault(c => c.Id == Id);
+
+            return View(chat);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateMessage(int chatId, string msg)
+        {
+            var message = new Message
+            {
+                ChatId = chatId,
+                Content = msg,
+                UserName = "Default",
+                Timestamp = DateTime.Now
+            };
+
+            // TODO: repos
+            _dbContext.Messages.Add(message);
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction("Chat", new { id = chatId});
         }
 
         [HttpPost]

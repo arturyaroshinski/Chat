@@ -3,7 +3,7 @@
 <div class="sidebar">
     @foreach (var chat in Model)
     {
-        <div class="room-button">@chat.Name</div>
+        <a class="room-button" asp-controller="Home" asp-action="Chat" asp-route-id="@chat.Id">@chat.Name</a>
     }
     <div class="room-button create-room-btn"><strong>+</strong></div>
 </div>

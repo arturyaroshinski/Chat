@@ -19,7 +19,7 @@ namespace ChatApp
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public IConfiguration Configuration { get; }
@@ -61,6 +61,7 @@ namespace ChatApp
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
