@@ -40,6 +40,8 @@ namespace ChatApp
                 .AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +64,11 @@ namespace ChatApp
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSignalR(routes => 
+            { 
+            
+            });
 
             app.UseEndpoints(endpoints =>
             {

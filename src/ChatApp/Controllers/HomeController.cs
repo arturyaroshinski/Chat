@@ -9,6 +9,7 @@ using ChatApp.Database;
 using ChatApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace ChatApp.Controllers
 {
@@ -26,7 +27,13 @@ namespace ChatApp.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var chats = _dbContext.Chats
+                .Include(x => x.Users)
+                .Where(x => !x.Users
+                    .Any(y => y.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                .ToList();
+
+            return View(chats);
         }
 
         [HttpGet("{id}")]
@@ -37,6 +44,46 @@ namespace ChatApp.Controllers
                 .FirstOrDefault(c => c.Id == Id);
 
             return View(chat);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateRoom(string name)
+        {
+            var chat = new Chat
+            {
+                Name = name,
+                Type = ChatType.Public
+            };
+
+            chat.Users.Add(new ChatUser 
+            {
+                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                Role = UserRole.Admin
+            });
+
+            _dbContext.Chats.Add(chat);
+
+            // TODO: create repository for models
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> JoinRoom(int id)
+        {
+            var chatUser = new ChatUser
+            {
+                ChatId = id,
+                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                Role = UserRole.Member
+            };
+
+            //TODO: repo
+            _dbContext.ChatUsers.Add(chatUser);
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction("Chat", new { id });
         }
 
         [HttpPost]
@@ -56,21 +103,6 @@ namespace ChatApp.Controllers
 
             return RedirectToAction("Chat", new { id = chatId});
         }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateRoom(string name)
-        {
-            _dbContext.Chats.Add(new Chat
-            {
-                Name = name,
-                Type = ChatType.Public
-            });
-            // TODO: create repository for models
-            await _dbContext.SaveChangesAsync();
-
-            return RedirectToAction("Index");
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

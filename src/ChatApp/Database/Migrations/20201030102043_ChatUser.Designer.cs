@@ -4,14 +4,16 @@ using ChatApp.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ChatApp.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    partial class ChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201030102043_ChatUser")]
+    partial class ChatUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +41,7 @@ namespace ChatApp.Migrations
 
             modelBuilder.Entity("ChatApp.Models.ChatUser", b =>
                 {
-                    b.Property<int>("ChatId")
+                    b.Property<int>("Chatid")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -48,7 +50,7 @@ namespace ChatApp.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
-                    b.HasKey("ChatId", "UserId");
+                    b.HasKey("Chatid", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -87,6 +89,9 @@ namespace ChatApp.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ChatId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -134,6 +139,8 @@ namespace ChatApp.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -280,13 +287,13 @@ namespace ChatApp.Migrations
             modelBuilder.Entity("ChatApp.Models.ChatUser", b =>
                 {
                     b.HasOne("ChatApp.Models.Chat", "Chat")
-                        .WithMany("Users")
-                        .HasForeignKey("ChatId")
+                        .WithMany()
+                        .HasForeignKey("Chatid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ChatApp.Models.User", "User")
-                        .WithMany("Chats")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -299,6 +306,13 @@ namespace ChatApp.Migrations
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ChatApp.Models.User", b =>
+                {
+                    b.HasOne("ChatApp.Models.Chat", null)
+                        .WithMany("Users")
+                        .HasForeignKey("ChatId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

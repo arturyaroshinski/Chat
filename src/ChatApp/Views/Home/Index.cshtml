@@ -1,6 +1,8 @@
-﻿<div class="chat-body">
-</div>
-<div class="chat-input input-group">
-    <input type="text" class="form-control">
-    <button type="submit" class="btn btn-success"><i class="far fa-paper-plane"></i></button>
+﻿@model IEnumerable<Chat>
+
+<div class="chat-body">
+    @foreach (var chat in Model)
+    {
+        <a class="room-button" asp-controller="Home" asp-action="JoinRoom" asp-route-id="@chat.Id">@chat.Name</a>
+    }
 </div>
