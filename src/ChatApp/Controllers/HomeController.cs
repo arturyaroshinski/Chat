@@ -8,9 +8,11 @@ using Microsoft.Extensions.Logging;
 using ChatApp.Database;
 using ChatApp.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChatApp.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -44,7 +46,7 @@ namespace ChatApp.Controllers
             {
                 ChatId = chatId,
                 Content = msg,
-                UserName = "Default",
+                UserName = User.Identity.Name,
                 Timestamp = DateTime.Now
             };
 
