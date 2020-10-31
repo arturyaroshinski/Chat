@@ -1,4 +1,5 @@
 ﻿using ChatApp.Database;
+using ChatApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,7 +23,7 @@ namespace ChatApp.VewComponents
 
             var chats = _dbContext.ChatUsers
                 .Include(x => x.Chat)
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == userId && x.Chat.Type == ChatType.Public)
                 .Select(x => x.Chat)
                 .ToList();
 

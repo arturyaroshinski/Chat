@@ -9,27 +9,24 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 
-<ul class="nav">
-    <li class="nav-item">
-        <a class="nav-link active" href="#">Active</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-    </li>
-</ul>
-
 <body>
+    <div class="nav">
+        <div class="nav-item">
+            <a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" asp-controller="Home" asp-action="Find">Find</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" asp-controller="Home" asp-action="Private">Private</a>
+        </div>
+    </div>
+
     <main class="main">
         @if (User.Identity.IsAuthenticated)
-         {
+        {
             <vc:room></vc:room>
-         }
+        }
         <div class="chat">
             @RenderBody()
         </div>
