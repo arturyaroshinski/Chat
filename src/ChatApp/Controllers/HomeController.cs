@@ -60,6 +60,7 @@ namespace ChatApp.Controllers
 
         public async Task<IActionResult> CreatePrivateRoom(string userId)
         {
+            //TODO: check for existing
             var chat = new Chat
             {
                 Type = ChatType.Private,
