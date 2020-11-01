@@ -19,6 +19,7 @@
 @section scripts
 {
     <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/messageBuilder.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         let connection = new signalR.HubConnectionBuilder()
@@ -28,23 +29,14 @@
         let _connectionId = '';
 
         connection.on("RecieveMessage", function (data) {
-            let div = document.createElement("div");
-            div.classList.add("message");
+            let message = messageBuilder()
+                .createMssage()
+                .withHeader(data.userName)
+                .withParagraph(data.content)
+                .withFooter(data.timestamp)
+                .build();
 
-            let header = document.createElement("header");
-            header.appendChild(document.createTextNode(data.userName + ":"));
-
-            let p = document.createElement("p");
-            p.appendChild(document.createTextNode(data.content));
-
-            let footer = document.createElement("footer");
-            footer.appendChild(document.createTextNode(data.timestamp));
-
-            div.appendChild(header);
-            div.appendChild(p);
-            div.appendChild(footer);
-
-            $('.chat-body').append(div);
+            $('.chat-body').append(message);
         });
 
         let joinRoom = function () {
