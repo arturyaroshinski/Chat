@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ChatApp.Database;
 using ChatApp.Hubs;
 using ChatApp.Models;
+using ChatApp.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +28,8 @@ namespace ChatApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
+
             services.AddDbContext<ChatDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -40,8 +43,7 @@ namespace ChatApp
                 .AddEntityFrameworkStores<ChatDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddControllersWithViews();
-
+            services.AddTransient<IChatRepository, ChatRepository>();
             services.AddSignalR();
         }
 

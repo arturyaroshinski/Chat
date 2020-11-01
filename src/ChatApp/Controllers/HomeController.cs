@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,39 +6,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ChatApp.Database;
 using ChatApp.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using ChatApp.Repository;
+using Microsoft.AspNetCore.SignalR;
+using ChatApp.Hubs;
 
 namespace ChatApp.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ChatDbContext _dbContext;
+        private readonly IChatRepository _chatRepository;
 
-        public HomeController(ILogger<HomeController> logger, ChatDbContext dbContext)
+        public HomeController(ILogger<HomeController> logger, IChatRepository chatRepository)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _chatRepository = chatRepository ?? throw new ArgumentNullException(nameof(chatRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public IActionResult Index()
         {
-            var chats = _dbContext.Chats
-                .Include(x => x.Users)
-                .Where(x => !x.Users
-                    .Any(y => y.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value))
-                .ToList();
+            var chats = _chatRepository.GetChats(GetUserId());
 
             return View(chats);
         }
 
-        public IActionResult Find()
+        public IActionResult Find([FromServices] ChatDbContext dbContext)
         {
-            var users = _dbContext.Users
-                .Where(x => x.Id != User.FindFirst(ClaimTypes.NameIdentifier).Value)
+            var users = dbContext.Users
+                .Where(x => x.Id != GetUserId())
                 .ToList();
 
             return View(users);
@@ -47,69 +43,28 @@ namespace ChatApp.Controllers
 
         public IActionResult Private()
         {
-            var chats = _dbContext.Chats
-                .Include(x => x.Users)
-                .ThenInclude(x => x.User)
-                .Where(x => x.Type == ChatType.Private
-                    && x.Users
-                    .Any(y => y.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value))
-                .ToList();
+            var chats = _chatRepository.GetPrivateChats(GetUserId());
 
             return View(chats);
         }
 
         public async Task<IActionResult> CreatePrivateRoom(string userId)
         {
-            //TODO: check for existing
-            var chat = new Chat
-            {
-                Type = ChatType.Private,
-            };
+            var id = await _chatRepository.CreatePrivateRoom(GetUserId(), userId);
 
-            chat.Users.Add(new ChatUser
-            {
-                UserId = userId
-            });
-
-            chat.Users.Add(new ChatUser
-            {
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value
-            });
-
-            _dbContext.Chats.Add(chat);
-            await _dbContext.SaveChangesAsync();
-
-            return RedirectToAction("Chat", new { id = chat.Id});
+            return RedirectToAction("Chat", new { id });
         }
-        [HttpGet("{id}")]
-        public IActionResult Chat(int Id)
-        {
-            var chat = _dbContext.Chats
-                .Include(x => x.Messages)
-                .FirstOrDefault(c => c.Id == Id);
 
-            return View(chat);
+        [HttpGet("{id}")]
+        public IActionResult Chat(int id)
+        {
+            return View(_chatRepository.GetChat(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateRoom(string name)
         {
-            var chat = new Chat
-            {
-                Name = name,
-                Type = ChatType.Public
-            };
-
-            chat.Users.Add(new ChatUser 
-            {
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
-                Role = UserRole.Admin
-            });
-
-            _dbContext.Chats.Add(chat);
-
-            // TODO: create repository for models
-            await _dbContext.SaveChangesAsync();
+            await _chatRepository.CreateRoom(name, GetUserId());
 
             return RedirectToAction("Index");
         }
@@ -117,37 +72,28 @@ namespace ChatApp.Controllers
         [HttpGet]
         public async Task<IActionResult> JoinRoom(int id)
         {
-            var chatUser = new ChatUser
-            {
-                ChatId = id,
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
-                Role = UserRole.Member
-            };
-
-            //TODO: repo
-            _dbContext.ChatUsers.Add(chatUser);
-            await _dbContext.SaveChangesAsync();
-
+            await _chatRepository.JoinRoom(GetUserId(), id);
+            
             return RedirectToAction("Chat", new { id });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateMessage(int chatId, string msg)
+        public async Task<IActionResult> SendMessage(
+            int roomId,
+            string msg,
+            [FromServices] IHubContext<ChatHub> chat)
         {
-            var message = new Message
+            var message = await _chatRepository.CreateMessage(roomId, User.Identity.Name, msg);
+
+            await chat.Clients.Group(roomId.ToString()).SendAsync("RecieveMessage", new
             {
-                ChatId = chatId,
-                Content = msg,
-                UserName = User.Identity.Name,
-                Timestamp = DateTime.Now
-            };
+                message.Content,
+                message.UserName,
+                Timestamp = message.Timestamp.ToString("dd/mm/yyyy hh:mm:ss")
+            });
 
-            // TODO: repos
-            _dbContext.Messages.Add(message);
-            await _dbContext.SaveChangesAsync();
-
-            return RedirectToAction("Chat", new { id = chatId});
+            return Ok();
         }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
