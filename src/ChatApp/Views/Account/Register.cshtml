@@ -1,7 +1,28 @@
-﻿<div>
-    <form asp-controller="Account" asp-action="Register">
-        <input type="text" name="username" placeholder="Username" />
-        <input type="password" name="password" placeholder="Password" />
-        <button type="submit">Register</button>
+﻿@model RegisterViewModel
+
+<div asp-validation-summary="ModelOnly"></div>
+<div class="wrapper">
+    <form class="wrapper" method="post" asp-controller="Account" asp-action="Register">
+        <div>
+            <label asp-for="Email"></label><br />
+            <input class="form-control" asp-for="Email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div>
+            <label asp-for="Name"></label><br />
+            <input class="form-control" asp-for="Name" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div>
+            <label asp-for="Password"></label><br />
+            <input class="form-control" asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div>
+            <label asp-for="PasswordConfirm"></label><br />
+            <input class="form-control" asp-for="PasswordConfirm" />
+            <span asp-validation-for="PasswordConfirm"></span>
+        </div>
+        <button class="btn btn-success" type="submit">Register</button>
     </form>
 </div>

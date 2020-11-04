@@ -1,7 +1,27 @@
-﻿<div>
-    <form asp-controller="Account" asp-action="Login">
-        <input type="text" name="username" placeholder="Username"/>
-        <input type="password" name="password" placeholder="Password"/>
-        <button type="submit">Login</button>
+﻿@model LoginViewModel
+
+<div class="wrapper">
+    <form class="wrapper" method="post" 
+          asp-controller="Account" 
+          asp-action="Login" 
+          asp-route-returnUrl="@Model.ReturnUrl">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label asp-for="Email"></label><br />
+            <input class="form-control" asp-for="Email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div>
+            <label asp-for="Password"></label><br />
+            <input class="form-control" asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div>
+            <label asp-for="RememberMe"></label>
+            <input class="form-check-input" asp-for="RememberMe" />
+        </div>
+        <div>
+            <button class="btn btn-success" type="submit">Login</button>
+        </div>
     </form>
 </div>

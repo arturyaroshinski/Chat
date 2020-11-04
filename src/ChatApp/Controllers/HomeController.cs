@@ -34,9 +34,24 @@ namespace ChatApp.Controllers
 
         public IActionResult Find([FromServices] ChatDbContext dbContext)
         {
+            // TODO: refactor
+            var userChats = _chatRepository.GetPrivateChats(GetUserId());
+
             var users = dbContext.Users
                 .Where(x => x.Id != GetUserId())
                 .ToList();
+            
+            foreach (var chat in userChats)
+            {
+                var chatUsers = chat.Users.Where(x => x.UserId != GetUserId());
+                foreach (var chatuser in chatUsers)
+                {
+                    if (chat.Users.Contains(chatuser))
+                    {
+                        users.Remove(chatuser.User);
+                    }
+                }
+            }
 
             return View(users);
         }
@@ -52,7 +67,7 @@ namespace ChatApp.Controllers
         {
             var id = await _chatRepository.CreatePrivateRoom(GetUserId(), userId);
 
-            return RedirectToAction("Chat", new { id });
+            return id == -1 ? RedirectToAction("Private") : RedirectToAction("Chat", new { id });
         }
 
         [HttpGet("{id}")]

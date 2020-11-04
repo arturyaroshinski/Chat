@@ -17,6 +17,7 @@ namespace ChatApp.Repository
             _dbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
         }
 
+        // TODO: get chats by deligate
         public Chat GetChat(int Id)
         {
             return _dbContext.Chats
@@ -54,35 +55,48 @@ namespace ChatApp.Repository
             _dbContext.ChatUsers.Add(chatUser);
             await _dbContext.SaveChangesAsync();
         }
+
+        /// <summary>
+        /// Create private room.
+        /// </summary>
+        /// <param name="rootId">User's id who trying to create room.</param>
+        /// <param name="targetId">User's id with whom room is created.</param>
+        /// <returns>Room id / -1 if room exist.</returns>
         public async Task<int> CreatePrivateRoom(string rootId, string targetId)
         {
             //TODO: check for existing
-            var chat = new Chat
+            var chats = GetPrivateChats(rootId);
+            if (!chats.Any(x => x.Users.Any(y => y.UserId == rootId)))
             {
-                Type = ChatType.Private,
-            };
+                var chat = new Chat
+                {
+                    Type = ChatType.Private,
+                };
 
-            chat.Users.Add(new ChatUser
-            {
-                UserId = targetId
-            });
+                chat.Users.Add(new ChatUser
+                {
+                    UserId = targetId
+                });
 
-            chat.Users.Add(new ChatUser
-            {
-                UserId = rootId
-            });
+                chat.Users.Add(new ChatUser
+                {
+                    UserId = rootId
+                });
 
-            _dbContext.Chats.Add(chat);
-            await _dbContext.SaveChangesAsync();
+                _dbContext.Chats.Add(chat);
+                await _dbContext.SaveChangesAsync();
 
-            return chat.Id;
+                return chat.Id;
+            }
+            return -1;
         }
+
         public IEnumerable<Chat> GetChats(string userId)
         {
             return _dbContext.Chats
                 .Include(x => x.Users)
                 .Where(x => !x.Users
-                    .Any(y => y.UserId == userId))
+                    .Any(y => y.UserId == userId) && x.Type == ChatType.Public)
                 .ToList();
         }
 

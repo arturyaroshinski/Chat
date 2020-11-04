@@ -1,5 +1,6 @@
 ﻿using ChatApp.Database;
 using ChatApp.Models;
+using ChatApp.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,6 +27,8 @@ namespace ChatApp.VewComponents
                 .Where(x => x.UserId == userId && x.Chat.Type == ChatType.Public)
                 .Select(x => x.Chat)
                 .ToList();
+
+            // var _chats = chatRepository.GetChats(userId);
 
             return View(chats);
         }
