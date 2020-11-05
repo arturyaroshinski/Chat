@@ -6,6 +6,7 @@ using ChatApp.Database;
 using ChatApp.Hubs;
 using ChatApp.Models;
 using ChatApp.Repository;
+using ChatApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -45,6 +46,9 @@ namespace ChatApp
 
             services.AddTransient<IChatRepository, ChatRepository>();
             services.AddSignalR();
+
+            services.Configure<EmailConfig>(Configuration.GetSection("EmailConfig"));
+            services.AddScoped<IEmailService, EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
