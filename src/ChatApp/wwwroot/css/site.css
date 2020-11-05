@@ -180,5 +180,18 @@ a:hover {
 }
 
 .form-check-input {
+    position: initial;
     margin: 0.5em;
+}
+
+.form-block {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    margin-bottom: 16px;
+}
+
+.validation-summary-errors,
+.field-validation-error {
+    color: crimson;
 }

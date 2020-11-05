@@ -20,6 +20,21 @@
         <div class="nav-item">
             <a class="nav-link" asp-controller="Home" asp-action="Private">Private</a>
         </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="nav-item">
+                <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+            </div>
+        }
+        else 
+        {  
+            <div class="nav-item">
+                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+            </div>
+            <div class="nav-item">
+                <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+            </div>
+        }
     </div>
 
     <main class="main">

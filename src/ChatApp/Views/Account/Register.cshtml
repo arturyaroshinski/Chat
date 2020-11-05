@@ -1,28 +1,33 @@
 ﻿@model RegisterViewModel
 
-<div asp-validation-summary="ModelOnly"></div>
 <div class="wrapper">
     <form class="wrapper" method="post" asp-controller="Account" asp-action="Register">
-        <div>
-            <label asp-for="Email"></label><br />
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="form-block">
+            <label asp-for="Email"></label>
             <input class="form-control" asp-for="Email" />
             <span asp-validation-for="Email"></span>
         </div>
-        <div>
-            <label asp-for="Name"></label><br />
+        <div class="form-block">
+            <label asp-for="Name"></label>
             <input class="form-control" asp-for="Name" />
             <span asp-validation-for="Name"></span>
         </div>
-        <div>
-            <label asp-for="Password"></label><br />
+        <div class="form-block">
+            <label asp-for="Password"></label>
             <input class="form-control" asp-for="Password" />
             <span asp-validation-for="Password"></span>
         </div>
-        <div>
-            <label asp-for="PasswordConfirm"></label><br />
+        <div class="form-block">
+            <label asp-for="PasswordConfirm"></label>
             <input class="form-control" asp-for="PasswordConfirm" />
             <span asp-validation-for="PasswordConfirm"></span>
         </div>
         <button class="btn btn-success" type="submit">Register</button>
     </form>
 </div>
+
+@section scripts{
+    <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
