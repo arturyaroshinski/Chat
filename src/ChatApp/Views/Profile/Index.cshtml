@@ -28,6 +28,8 @@
 @section scripts
 {
     <script>
-        $('.profile-img').attr('src', "@Url.Action("GetImage", "Profile")");
+        if (@Model.Avatar.Length > 0) {
+            $('.profile-img').attr('src', "@Url.Action("GetImage", "Profile")");
+        }
     </script>
 }

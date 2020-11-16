@@ -40,6 +40,7 @@ namespace ChatApp.Controllers
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);
 
+                // TODO: refactor it
                 if (model.File != null && model.File.Length > 0)
                 {
                     byte[] imageData = null;
