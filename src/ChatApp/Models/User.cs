@@ -5,6 +5,7 @@ namespace ChatApp.Models
 {
     public class User : IdentityUser
     {
+        public byte[] Avatar { get; set; }
         public ICollection<ChatUser> Chats { get; set; }
     }
 }

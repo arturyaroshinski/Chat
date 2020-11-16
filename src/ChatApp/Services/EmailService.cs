@@ -2,6 +2,7 @@
 using MailKit.Net.Smtp;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace ChatApp.Services
 {
@@ -11,7 +12,7 @@ namespace ChatApp.Services
 
         public EmailService(IOptions<EmailConfig> config)
         {
-            _config = config ?? throw new System.ArgumentNullException(nameof(config));
+            _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
         public async Task SendEmailAsync(string email, string subject, string message)

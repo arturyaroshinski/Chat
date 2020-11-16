@@ -37,6 +37,7 @@
                 .build();
 
             $('.chat-body').append(message);
+            $(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
         });
 
         connection.start()

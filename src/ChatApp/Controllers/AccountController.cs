@@ -77,9 +77,9 @@ namespace ChatApp.Controllers
                         protocol: HttpContext.Request.Scheme);
 
                     // TODO: create email template
-                    EmailService emailService = new EmailService();
-                    await emailService.SendEmailAsync(model.Email, "Confirm your account",
-                        $"Please confirm your email by clicking the link: <a href='{callbackUrl}'>Confirm your account</a>");
+                    //EmailService emailService = new EmailService();
+                    //await emailService.SendEmailAsync(model.Email, "Confirm your account",
+                    //    $"Please confirm your email by clicking the link: <a href='{callbackUrl}'>Confirm your account</a>");
 
                     return Content("To complete the registration, check your email and follow the link provided in the letter");
                 }

@@ -6,35 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ChatApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 
 <body>
     <div class="nav">
-        <div class="nav-item">
-            <a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a>
-        </div>
-        <div class="nav-item">
-            <a class="nav-link" asp-controller="Home" asp-action="Find">Find</a>
-        </div>
-        <div class="nav-item">
-            <a class="nav-link" asp-controller="Home" asp-action="Private">Private</a>
-        </div>
-        @if (User.Identity.IsAuthenticated)
-        {
+        <div class="menu-item">
             <div class="nav-item">
-                <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
-            </div>
-        }
-        else 
-        {  
-            <div class="nav-item">
-                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                <a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a>
             </div>
             <div class="nav-item">
-                <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+                <a class="nav-link" asp-controller="Home" asp-action="Find">Find</a>
             </div>
-        }
+            <div class="nav-item">
+                <a class="nav-link" asp-controller="Home" asp-action="Private">Private</a>
+            </div>
+        </div>
+        <div class="menu-item">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="nav-item">
+                    <a asp-controller="Profile" asp-action="Index" class="nav-link"><i class="fas fa-user-circle profile-icon"></i></a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+                </div>
+            }
+            else
+            {
+                <div class="nav-item">
+                    <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+                </div>
+            }
+        </div>
     </div>
 
     <main class="main">
