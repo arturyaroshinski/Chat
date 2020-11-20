@@ -1,34 +1,23 @@
-﻿using ChatApp.Database;
-using ChatApp.Models;
-using ChatApp.Repository;
+﻿using ChatApp.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Security.Claims;
 
 namespace ChatApp.VewComponents
 {
     public class RoomViewComponent : ViewComponent
     {
-        private readonly ChatDbContext _dbContext;
+        private readonly IChatRepository _chatRepository;
 
-        public RoomViewComponent(ChatDbContext dbContext)
+        public RoomViewComponent(IChatRepository chatRepository)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _chatRepository = chatRepository ?? throw new ArgumentNullException(nameof(chatRepository));
         }
         public IViewComponentResult Invoke()
         {
-            // TODO: repository
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var chats = _dbContext.ChatUsers
-                .Include(x => x.Chat)
-                .Where(x => x.UserId == userId && x.Chat.Type == ChatType.Public)
-                .Select(x => x.Chat)
-                .ToList();
-
-            // var _chats = chatRepository.GetChats(userId);
+            var chats = _chatRepository.GetChatsWithUser(userId);
 
             return View(chats);
         }

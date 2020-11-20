@@ -28,7 +28,7 @@
 @section scripts
 {
     <script>
-        if (@Model.Avatar.Length > 0) {
+        if (@Model.Avatar?.Length > 0) {
             $('.profile-img').attr('src', "@Url.Action("GetImage", "Profile")");
         }
     </script>

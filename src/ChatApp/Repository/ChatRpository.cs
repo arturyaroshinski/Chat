@@ -17,7 +17,6 @@ namespace ChatApp.Repository
             _dbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
         }
 
-        // TODO: get chats by deligate
         public Chat GetChat(int Id)
         {
             return _dbContext.Chats
@@ -64,7 +63,6 @@ namespace ChatApp.Repository
         /// <returns>Room id / -1 if room exist.</returns>
         public async Task<int> CreatePrivateRoom(string rootId, string targetId)
         {
-            //TODO: check for existing
             var chats = GetPrivateChats(rootId);
             if (!chats.Any(x => x.Users.Any(y => y.UserId == rootId)))
             {
@@ -91,13 +89,24 @@ namespace ChatApp.Repository
             return -1;
         }
 
-        public IEnumerable<Chat> GetChats(string userId)
+        public IEnumerable<Chat> GetChatsWithoutUser(string userId)
         {
             return _dbContext.Chats
                 .Include(x => x.Users)
                 .Where(x => !x.Users
                     .Any(y => y.UserId == userId) && x.Type == ChatType.Public)
                 .ToList();
+        }
+
+        public IEnumerable<Chat> GetChatsWithUser(string userId)
+        {
+            var chats = _dbContext.ChatUsers
+                .Include(x => x.Chat)
+                .Where(x => x.UserId == userId && x.Chat.Type == ChatType.Public)
+                .Select(x => x.Chat)
+                .ToList();
+
+            return chats;
         }
 
         public IEnumerable<Chat> GetPrivateChats(string userId)

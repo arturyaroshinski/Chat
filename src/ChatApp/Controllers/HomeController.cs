@@ -27,7 +27,7 @@ namespace ChatApp.Controllers
 
         public IActionResult Index()
         {
-            var chats = _chatRepository.GetChats(GetUserId());
+            var chats = _chatRepository.GetChatsWithoutUser(GetUserId());
 
             return View(chats);
         }

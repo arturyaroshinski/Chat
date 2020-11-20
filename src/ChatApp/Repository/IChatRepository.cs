@@ -12,7 +12,8 @@ namespace ChatApp.Repository
 
         Task JoinRoom(string userId, int chatId);
 
-        IEnumerable<Chat> GetChats(string userId);
+        IEnumerable<Chat> GetChatsWithoutUser(string userId);
+        IEnumerable<Chat> GetChatsWithUser(string userId);
 
         Task<int> CreatePrivateRoom(string rootId, string targetId);
 
