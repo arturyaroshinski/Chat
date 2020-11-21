@@ -10,7 +10,7 @@
             </div>
          }
     </div>
-    <form asp-controller="Chat" asp-action="SendMessage" class="chat-input input-group" onsubmit="sendMessage(event)">
+    <form class="chat-input input-group" onsubmit="sendMessage(event)">
         <input type="text" class="form-control" id="message-input" name="msg">
         <button type="submit" class="btn btn-success"><i class="far fa-paper-plane"></i></button>
         <input type="hidden" name="roomId" value="@Model.Id">
@@ -20,7 +20,6 @@
 {
     <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
     <script src="~/js/messageBuilder.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         let connection = new signalR.HubConnectionBuilder()
             .withUrl("/chatHub")
@@ -57,15 +56,19 @@
 
             let data = new FormData(event.target);
 
-            // TODO: jquery ajax
-            axios.post('Home/SendMessage', data)
-                .then(res => {
+            $.ajax({
+                url: 'Home/SendMessage',
+                data: data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function (data) {
                     console.log('Message sent!');
-                    document.getElementById("message-input").value = "";
-                })
-                .catch(err => {
-                    console.log('Failed to send message!');
-                });
+                    $("#message-input").val('');
+                }
+            }).fail(err => console.log('Failed to send message!'));
         }
+
+        $(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
     </script>
 }

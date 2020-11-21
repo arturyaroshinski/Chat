@@ -40,11 +40,12 @@ namespace ChatApp
                 .AddEntityFrameworkStores<ChatDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddTransient<IChatRepository, ChatRepository>();
             services.AddSignalR();
 
             services.Configure<EmailConfig>(Configuration.GetSection("EmailConfig"));
+            services.AddTransient<IChatRepository, ChatRepository>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IProfileService, ProfileService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

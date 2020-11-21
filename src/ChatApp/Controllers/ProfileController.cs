@@ -1,4 +1,5 @@
 ﻿using ChatApp.Models;
+using ChatApp.Services;
 using ChatApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,10 +14,15 @@ namespace ChatApp.Controllers
     public class ProfileController : BaseController
     {
         private readonly UserManager<User> _userManager;
+        private readonly IProfileService _profileService;
 
-        public ProfileController(UserManager<User> userManager)
+        public ProfileController(
+            UserManager<User> userManager,
+            IProfileService profileService
+            )
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _profileService = profileService ?? throw new ArgumentNullException(nameof(profileService));
         }
 
         [HttpGet]
@@ -40,18 +46,8 @@ namespace ChatApp.Controllers
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);
 
-                // TODO: refactor it
-                if (model.File != null && model.File.Length > 0)
-                {
-                    byte[] imageData = null;
-                    using (var br = new BinaryReader(model.File.OpenReadStream()))
-                    {
-                        imageData = br.ReadBytes((int)model.File.Length);
-                    }
+                await _profileService.UpdateAvatarAsync(model.File, user);
 
-                    user.Avatar = imageData;
-                }
-                // TODO: profileService for editing it;
                 await _userManager.UpdateAsync(user);
             }
 

@@ -34,7 +34,6 @@ namespace ChatApp.Controllers
 
         public IActionResult Find([FromServices] ChatDbContext dbContext)
         {
-            // TODO: refactor
             var userChats = _chatRepository.GetPrivateChats(GetUserId());
 
             var users = dbContext.Users
