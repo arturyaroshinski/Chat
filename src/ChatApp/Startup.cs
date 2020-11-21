@@ -28,7 +28,7 @@ namespace ChatApp
             services.AddControllersWithViews();
 
             services.AddDbContext<ChatDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("Heroku")));
 
             services.AddIdentity<User, IdentityRole>(options => {
                 options.Password.RequireDigit = false;
