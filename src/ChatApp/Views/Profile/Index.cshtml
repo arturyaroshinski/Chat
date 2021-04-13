@@ -14,9 +14,9 @@
         </div>
     </div>
     <div class="">
-        <div>
-            <label>Username</label>
-            <input asp-for="UserName" type="text" class="form-control" id="" value="@Model.UserName" required>
+        <div class="d-flex profile-block">
+            <label>Username: </label>
+            <input asp-for="UserName" type="text" class="form-control" id="" value="@Model.UserName" disabled>
         </div>
         <div>
             <label>Email address : @Model.Email</label>

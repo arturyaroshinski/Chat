@@ -1,4 +1,4 @@
-﻿let messageBuilder = function () {
+﻿const messageBuilder = function () {
     let div = null;
     let header = null;
     let p = null;
@@ -10,11 +10,9 @@
             if (classList === undefined)
                 classList = [];
 
-            for (var i = 0; i < classList.length; i++) {
-                div.classList.add(classList[i]);
-            }
-
+            classList.forEach(className => { div.classList.add(className) });
             div.classList.add("message");
+
             return this;
         },
 
@@ -36,7 +34,7 @@
             return this;
         },
 
-        build: function (text) {
+        build: function () {
             div.appendChild(header);
             div.appendChild(p);
             div.appendChild(footer);

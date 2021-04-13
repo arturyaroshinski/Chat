@@ -26,9 +26,10 @@ namespace ChatApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddDbContext<ChatDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("Heroku")));
+                options.UseNpgsql(Configuration.GetConnectionString("Postgres")));
 
             services.AddIdentity<User, IdentityRole>(options => {
                 options.Password.RequireDigit = false;

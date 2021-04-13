@@ -211,6 +211,11 @@ a:hover {
     max-width: 400px;
 }
 
+.profile-block {
+    align-items: baseline;
+    margin: 0.5em 0;
+}
+
 .custom-file-label {
     overflow: hidden;
 }
